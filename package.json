@@ -1,0 +1,24 @@
+{
+  "name": "sweetjs-loader",
+  "version": "0.0.0",
+  "description": "Loader for sweetjs macros",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "sweetjs",
+    "webpack"
+  ],
+  "author": "Pete Hunt",
+  "license": "Apache 2",
+  "dependencies": {
+    "sweet.js": "^0.5.0",
+    "loader-utils": "^0.2.1",
+    "async": "^0.2.10"
+  },
+  "devDependencies": {
+    "jasmine-node": "^1.14.2",
+    "webpack": "^1.1.0-beta9"
+  }
+}
