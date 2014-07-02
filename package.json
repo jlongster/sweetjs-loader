@@ -13,9 +13,8 @@
   "author": "Pete Hunt",
   "license": "Apache 2",
   "dependencies": {
-    "sweet.js": "^0.5.0",
     "loader-utils": "^0.2.1",
-    "async": "^0.2.10"
+    "rsvp": "^3.0.9"
   },
   "devDependencies": {
     "jasmine-node": "^1.14.2",

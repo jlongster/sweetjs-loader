@@ -1,37 +1,62 @@
-var async = require('async');
-var loaderUtils = require('loader-utils');
 var sweet = require('sweet.js');
+var path = require('path');
+var RSVP = require('rsvp');
+var loaderUtils = require('loader-utils');
+
+var moduleCache = {};
+
+function resolve(loader, filepath) {
+  var promise = new RSVP.Promise(function(resolve, reject) {
+    loader.resolve(loader.context, filepath, function(err, res) {
+      if(err) {
+        reject(err);
+      }
+      else {
+        resolve(res);
+      }
+    });
+  });
+
+  return promise;
+}
 
 module.exports = function(source) {
-  this.async();
+  var loader = this;
+  loader.async();
+  var config = loaderUtils.parseQuery(loader.query);
+  var loaderRequest = loaderUtils.getCurrentRequest(this);
+  var fileRequest = loaderUtils.getRemainingRequest(this);
+  config.modules = config.modules || [];
 
-  var config = loaderUtils.parseQuery(this.query);
-
-  async.map(
-    config.modules || [],
-    function(module, callback) {
-      this.resolve(this.context, module, function(err, result) {
-	if (err) {
-	  callback(err);
-	  return;
-	}
-	try {
-	  callback(null, sweet.loadNodeModule(process.cwd(), result));
-	} catch (e) {
-	  callback(e);
-	}
+  RSVP.all(config.modules.map(function(mod) {
+    if(moduleCache[mod]) {
+      return moduleCache[mod];
+    }
+    return resolve(loader, mod).then(function(res) {
+      moduleCache[mod] = sweet.loadNodeModule(process.cwd(), res);
+      return moduleCache[mod];
+    });
+  })).then(function(modules) {
+    if(config.readtables) {
+      return RSVP.all(config.readtables.map(function(mod) {
+        return resolve(loader, mod).then(function(res) {
+          sweet.setReadtable(res);
+        })
+      })).then(function() {
+        return modules;
       });
-    }.bind(this),
-    function(err, results) {
-      if (err) {
-	this.callback(err);
-	return;
-      }
-      config.modules = results;
-      var result = sweet.compile(source, config);
-      
-      this.cacheable && this.cacheable();
-      this.callback(null, result.code, result.sourceMap);
-    }.bind(this)
-  );
+    }
+    return modules;
+  }).then(function(modules) {
+    var result = sweet.compile(source, {
+      modules: modules,
+      sourceMap: true,
+      filename: fileRequest
+    });
+
+    loader.cacheable && loader.cacheable();
+    loader.callback(null, result.code, result.sourceMap);
+  }).catch(function(err) {
+    loader.callback(err);
+  });
 };
