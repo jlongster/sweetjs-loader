@@ -2,7 +2,10 @@
 
 Use it like any other loader.
 
-It takes a query string that contains sweetjs compiler options. The only one you need to care about is `modules` which lets you specify where your macros are defined. Usually you will have a common macro library you apply to everything.
+It takes a query string that contains sweetjs compiler options. The
+only one you need to care about is `modules` which lets you specify
+where your macros are defined. Usually you will have a common macro
+library you apply to everything.
 
 ## example webpack.config.js
 
@@ -16,7 +19,9 @@ module.exports = {
     filename: 'bundle.js'
   },
   module: {
-    loaders: [{test: /\.js$/, loader: 'sweetjs?modules[]=./macros.sjs'}]
+    loaders: [{
+      test: /\.js$/, loader: 'sweetjs?modules[]=./macros.sjs,readtables[]=reader-mod'
+    }]
   }
 };
 ```
