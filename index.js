@@ -37,8 +37,8 @@ module.exports = function(source) {
       return moduleCache[mod];
     });
   })).then(function(modules) {
-    if(config.readtables) {
-      return RSVP.all(config.readtables.map(function(mod) {
+    if(config.readers) {
+      return RSVP.all(config.readers.map(function(mod) {
         return resolve(loader, mod).then(function(res) {
           sweet.setReadtable(res);
         })
