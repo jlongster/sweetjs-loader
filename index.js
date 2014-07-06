@@ -50,7 +50,7 @@ module.exports = function(source) {
   }).then(function(modules) {
     var result = sweet.compile(source, {
       modules: modules,
-      sourceMap: true,
+      sourceMap: !(config.sourceMap === 'false'),
       filename: fileRequest
     });
 
