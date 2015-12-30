@@ -1,6 +1,6 @@
 {
   "name": "sweetjs-loader",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Loader for sweetjs macros",
   "main": "index.js",
   "scripts": {
@@ -11,7 +11,7 @@
     "webpack"
   ],
   "author": "James Long",
-  "contributors": ["Pete Hunt"],
+  "contributors": ["Pete Hunt", "James Long"],
   "license": "Apache 2",
   "dependencies": {
     "loader-utils": "^0.2.1",
