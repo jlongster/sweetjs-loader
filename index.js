@@ -51,7 +51,8 @@ module.exports = function(source) {
     var result = sweet.compile(source, {
       modules: modules,
       sourceMap: true,
-      filename: fileRequest
+      filename: fileRequest,
+      readableNames: !!config.readableNames
     });
 
     loader.cacheable && loader.cacheable();
